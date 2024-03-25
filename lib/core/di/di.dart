@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 abstract class CoreDI {
@@ -25,9 +26,12 @@ abstract class CoreDI {
       );
     }
 
-    Get.lazyPut<Dio>(
-      () => _client,
-      fenix: true,
+    GetIt.I.registerSingleton<Dio>(
+      _client,
+    );
+
+    GetIt.I.registerLazySingleton<GlobalKey<NavigatorState>>(
+      () => GlobalKey(),
     );
   }
 }
