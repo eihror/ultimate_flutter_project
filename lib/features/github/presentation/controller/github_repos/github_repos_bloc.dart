@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultimate_flutter_project/core/util/debouncer.dart';
-import 'package:ultimate_flutter_project/features/home/domain/usecase/fetch_repos_by_user_usecase.dart';
-import 'package:ultimate_flutter_project/features/home/presentation/controller/home_ui_event.dart';
-import 'package:ultimate_flutter_project/features/home/presentation/controller/home_ui_state.dart';
+import 'package:ultimate_flutter_project/features/github/domain/usecase/fetch_repos_by_user_usecase.dart';
+import 'package:ultimate_flutter_project/features/github/presentation/controller/github_repos/github_repos_ui_event.dart';
+import 'package:ultimate_flutter_project/features/github/presentation/controller/github_repos/github_repos_ui_state.dart';
 
-class HomeBloc extends Bloc<HomeUiEvent, HomeUiState> {
-  HomeBloc({
+class GithubReposBloc extends Bloc<GithubReposUiEvent, GithubReposUiState> {
+  GithubReposBloc({
     required this.fetchReposByUserUseCase,
-  }) : super(HomeUiState()) {
+  }) : super(GithubReposUiState()) {
     on<OnInitScreen>(_handleOnInitScreen);
     on<OnUsernameTextChanged>(_handleOnUsernameTextChanged);
   }
@@ -38,14 +38,14 @@ class HomeBloc extends Bloc<HomeUiEvent, HomeUiState> {
 
   FutureOr<void> _handleOnInitScreen(
     OnInitScreen event,
-    Emitter<HomeUiState> emit,
+    Emitter<GithubReposUiState> emit,
   ) async {
     _handleListener();
   }
 
   FutureOr<void> _handleOnUsernameTextChanged(
     OnUsernameTextChanged event,
-    Emitter<HomeUiState> emit,
+    Emitter<GithubReposUiState> emit,
   ) async {
     try {
       emit(

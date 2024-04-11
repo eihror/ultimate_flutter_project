@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:ultimate_flutter_project/features/home/domain/model/github_repo.dart';
+import 'package:ultimate_flutter_project/features/github/domain/model/github_repo.dart';
 
-class HomeUiState extends Equatable {
-  HomeUiState({
+class GithubReposUiState extends Equatable {
+  GithubReposUiState({
     List<GithubRepo>? githubRepoList,
   }) : githubRepoList = githubRepoList ?? List.empty();
 
-  factory HomeUiState.initialState() {
-    return HomeUiState();
+  factory GithubReposUiState.initialState() {
+    return GithubReposUiState();
   }
 
   final List<GithubRepo> githubRepoList;
@@ -17,10 +17,10 @@ class HomeUiState extends Equatable {
         githubRepoList,
       ];
 
-  HomeUiState copyWith({
+  GithubReposUiState copyWith({
     List<GithubRepo>? githubRepoList,
   }) {
-    return HomeUiState(
+    return GithubReposUiState(
       githubRepoList: githubRepoList ?? this.githubRepoList,
     );
   }

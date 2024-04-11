@@ -1,18 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class GithubRepo extends Equatable {
-  /*@JsonKey(name: "id")
-  int? id;
-  @JsonKey(name: "name")
-  String? name;
-  @JsonKey(name: "full_name")
-  String? fullName;
-  @JsonKey(name: "description")
-  String? description;
-  @JsonKey(name: "owner")
-  GithubOwner? owner;*/
-
-  GithubRepo({
+  const GithubRepo({
     this.id = -1,
     this.name = "",
     this.fullName = "",
