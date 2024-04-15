@@ -85,12 +85,6 @@ class GithubUsersBloc extends Bloc<GithubUsersUiEvent, GithubUsersUiState> {
     required Emitter<GithubUsersUiState> emit,
   }) async {
     try {
-      emit(
-        state.copyWith(
-          githubOwnerList: List.empty(),
-        ),
-      );
-
       final result = await fetchUserListUserCase(name: null);
 
       emit(
