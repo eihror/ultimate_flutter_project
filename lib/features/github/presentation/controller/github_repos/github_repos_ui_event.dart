@@ -1,11 +1,9 @@
 abstract class GithubReposUiEvent {}
 
-final class OnInitScreen extends GithubReposUiEvent {}
-
-final class OnUsernameTextChanged extends GithubReposUiEvent {
-  OnUsernameTextChanged({
-    required this.value,
+final class OnInitScreen extends GithubReposUiEvent {
+  OnInitScreen({
+    required this.username,
   });
 
-  final String value;
+  final String username;
 }

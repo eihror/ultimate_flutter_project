@@ -9,3 +9,11 @@ final class OnUsernameTextChanged extends GithubUsersUiEvent {
 
   final String value;
 }
+
+final class ClickedOnGithubUserTile extends GithubUsersUiEvent {
+  ClickedOnGithubUserTile({
+    required this.username,
+  });
+
+  final String username;
+}

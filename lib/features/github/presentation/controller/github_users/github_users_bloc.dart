@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultimate_flutter_project/core/util/debouncer.dart';
 import 'package:ultimate_flutter_project/features/github/domain/usecase/fetch_user_list_usecase.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_event.dart';
+import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_side_effect.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_state.dart';
 
 class GithubUsersBloc extends Bloc<GithubUsersUiEvent, GithubUsersUiState> {
@@ -13,6 +14,7 @@ class GithubUsersBloc extends Bloc<GithubUsersUiEvent, GithubUsersUiState> {
   }) : super(GithubUsersUiState()) {
     on<OnInitScreen>(_handleOnInitScreen);
     on<OnUsernameTextChanged>(_handleOnUsernameTextChanged);
+    on<ClickedOnGithubUserTile>(_handleClickedOnGithubUserTile);
   }
 
   final TextEditingController userNameTextEditingController =
@@ -101,5 +103,18 @@ class GithubUsersBloc extends Bloc<GithubUsersUiEvent, GithubUsersUiState> {
     } finally {
       // Remove finally section if is not needed
     }
+  }
+
+  FutureOr<void> _handleClickedOnGithubUserTile(
+    ClickedOnGithubUserTile event,
+    Emitter<GithubUsersUiState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        uiSideEffect: NavigateToGithubUserRepos(
+          username: event.username,
+        ),
+      ),
+    );
   }
 }

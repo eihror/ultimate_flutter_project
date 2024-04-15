@@ -1,0 +1,14 @@
+{
+  "screenSplashTitle": "Splash Screen",
+  "screenGithubUserListSearchTerm": "Search for a specific user",
+  "screenGithubReposListTitle": "{username} repos",
+  "@screenGithubReposListTitle": {
+    "description": "Github Repository title screen",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "mojombo"
+      }
+    }
+  }
+}
