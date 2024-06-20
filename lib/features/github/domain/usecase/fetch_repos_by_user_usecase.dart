@@ -10,7 +10,7 @@ class FetchReposByUserUseCase {
 
   final GithubRepository repository;
 
-  FutureOr<List<GithubRepo>> call({required String username}) {
-    return repository.fetchRepoListByUser(username: username);
+  FutureOr<List<GithubRepo>> call({required String username}) async {
+    return await repository.fetchRepoListByUser(username: username);
   }
 }

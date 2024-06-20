@@ -26,14 +26,16 @@ class GithubReposBloc extends Bloc<GithubReposUiEvent, GithubReposUiState> {
         ),
       );
 
-      if (event.username.isNotEmpty) {
-        final result = await fetchReposByUserUseCase(username: event.username);
+      final result = await fetchReposByUserUseCase(username: event.username);
 
-        emit(
-          state.copyWith(
-            githubRepoList: result,
-          ),
-        );
+      emit(
+        state.copyWith(
+          githubRepoList: result,
+        ),
+      );
+
+      if (event.username.isNotEmpty) {
+
       } else {
         emit(
           state.copyWith(
