@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultimate_flutter_project/core/util/debouncer.dart';
+import 'package:ultimate_flutter_project/features/github/domain/usecase/favorite_owner_usecase.dart';
 import 'package:ultimate_flutter_project/features/github/domain/usecase/fetch_user_list_usecase.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_event.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_side_effect.dart';
@@ -11,16 +12,19 @@ import 'package:ultimate_flutter_project/features/github/presentation/controller
 class GithubUsersBloc extends Bloc<GithubUsersUiEvent, GithubUsersUiState> {
   GithubUsersBloc({
     required this.fetchUserListUserCase,
+    required this.favoriteOwnerUseCase,
   }) : super(GithubUsersUiState()) {
     on<OnInitScreen>(_handleOnInitScreen);
     on<OnUsernameTextChanged>(_handleOnUsernameTextChanged);
     on<ClickedOnGithubUserTile>(_handleClickedOnGithubUserTile);
+    on<ClickedOnFavoriteUser>(_handleClickedOnFavoriteUser);
   }
 
   final TextEditingController userNameTextEditingController =
       TextEditingController();
 
   final FetchUserListUserCase fetchUserListUserCase;
+  final FavoriteOwnerUseCase favoriteOwnerUseCase;
 
   final _debouncer = Debouncer(
     milliseconds: 500,
@@ -110,5 +114,20 @@ class GithubUsersBloc extends Bloc<GithubUsersUiEvent, GithubUsersUiState> {
         ),
       ),
     );
+  }
+
+  FutureOr<void> _handleClickedOnFavoriteUser(
+    ClickedOnFavoriteUser event,
+    Emitter<GithubUsersUiState> emit,
+  ) async {
+    try {
+      await favoriteOwnerUseCase(owner: event.owner);
+
+      await _fetchGithubUserList(emit: emit);
+    } on Exception catch (_) {
+      // Handle any error here
+    } finally {
+      // Remove finally section if is not needed
+    }
   }
 }

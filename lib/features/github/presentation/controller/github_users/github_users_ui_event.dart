@@ -1,3 +1,5 @@
+import 'package:ultimate_flutter_project/features/github/domain/model/github_owner.dart';
+
 abstract class GithubUsersUiEvent {}
 
 final class OnInitScreen extends GithubUsersUiEvent {}
@@ -16,4 +18,12 @@ final class ClickedOnGithubUserTile extends GithubUsersUiEvent {
   });
 
   final String username;
+}
+
+final class ClickedOnFavoriteUser extends GithubUsersUiEvent {
+  ClickedOnFavoriteUser({
+    required this.owner,
+  });
+
+  final GithubOwner owner;
 }

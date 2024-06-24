@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ultimate_flutter_project/database/database.dart';
@@ -14,6 +13,7 @@ abstract class GithubDataDI {
     GetIt.I.registerLazySingleton<LocalGithubDataSource>(
       () => LocalGithubDataSourceImpl(
         ownerDao: GetIt.I<AppDatabase>().ownerDao,
+        repoDao: GetIt.I<AppDatabase>().repoDao,
       ),
     );
 
@@ -27,7 +27,6 @@ abstract class GithubDataDI {
       () => GithubRepositoryImpl(
         localGithubDataSource: GetIt.I<LocalGithubDataSource>(),
         remoteGithubDataSource: GetIt.I<RemoteGithubDataSource>(),
-        connectivity: GetIt.I<Connectivity>(),
       ),
     );
   }

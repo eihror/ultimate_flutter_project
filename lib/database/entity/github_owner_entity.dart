@@ -9,7 +9,6 @@ class GithubOwnerEntity extends Equatable {
     this.name,
     this.avatarUrl,
     this.description,
-    this.isFavorite = false,
   });
 
   factory GithubOwnerEntity.fromOwner({
@@ -27,8 +26,6 @@ class GithubOwnerEntity extends Equatable {
   @ColumnInfo(name: "avatar_url")
   final String? avatarUrl;
   final String? description;
-  @ColumnInfo(name: "is_favorite")
-  final bool isFavorite;
 
   @override
   List<Object?> get props => [
@@ -36,6 +33,5 @@ class GithubOwnerEntity extends Equatable {
         name,
         avatarUrl,
         description,
-        isFavorite,
       ];
 }

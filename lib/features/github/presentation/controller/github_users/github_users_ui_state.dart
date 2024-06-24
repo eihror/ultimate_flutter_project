@@ -30,4 +30,17 @@ class GithubUsersUiState extends Equatable {
       uiSideEffect: uiSideEffect ?? this.uiSideEffect,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other &&
+          other is GithubUsersUiState &&
+          runtimeType == other.runtimeType &&
+          githubOwnerList == other.githubOwnerList &&
+          uiSideEffect == other.uiSideEffect;
+
+  @override
+  int get hashCode =>
+      super.hashCode ^ githubOwnerList.hashCode ^ uiSideEffect.hashCode;
 }

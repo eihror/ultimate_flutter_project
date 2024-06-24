@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ultimate_flutter_project/core/extension/context_extension.dart';
 import 'package:ultimate_flutter_project/core/routes/app_routes.dart';
+import 'package:ultimate_flutter_project/features/github/domain/model/github_owner.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_bloc.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_event.dart';
 import 'package:ultimate_flutter_project/features/github/presentation/controller/github_users/github_users_ui_side_effect.dart';
@@ -82,42 +84,64 @@ class GithubUsersScreen extends StatelessWidget {
                     padding:
                         const EdgeInsetsDirectional.symmetric(horizontal: 16),
                     itemBuilder: (context, index) {
-                      final repo = state.githubOwnerList[index];
+                      final GithubOwner owner = state.githubOwnerList[index];
                       return ListTile(
                         contentPadding: const EdgeInsetsDirectional.all(16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                           side: const BorderSide(color: Colors.black),
                         ),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image.network(repo.avatarUrl),
+                        leading: CachedNetworkImage(
+                          imageUrl: owner.avatarUrl,
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(48)),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.star_border,
+                              onPressed: () {
+                                context
+                                    .read<GithubUsersBloc>()
+                                    .add(ClickedOnFavoriteUser(owner: owner));
+                              },
+                              icon: Icon(
+                                owner.isFavorite
+                                    ? Icons.star_outlined
+                                    : Icons.star_border,
+                                color: owner.isFavorite ? Colors.amber : null,
                               ),
                             ),
                             const Icon(Icons.chevron_right),
                           ],
                         ),
                         title: Text(
-                          repo.name,
+                          owner.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        subtitle: repo.description.isNotEmpty
-                            ? Text(repo.description)
+                        subtitle: owner.description.isNotEmpty
+                            ? Text(owner.description)
                             : null,
                         onTap: () {
                           context.read<GithubUsersBloc>().add(
                                 ClickedOnGithubUserTile(
-                                  username: repo.name,
+                                  username: owner.name,
                                 ),
                               );
                         },

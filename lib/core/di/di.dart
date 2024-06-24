@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,6 @@ abstract class CoreDI {
     GetIt.I.registerSingleton<Dio>(
       _client,
     );
-
-    GetIt.I.registerSingleton<Connectivity>(Connectivity());
 
     GetIt.I.registerLazySingleton<GlobalKey<NavigatorState>>(
       () => GlobalKey(),

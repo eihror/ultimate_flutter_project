@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ultimate_flutter_project/features/github/data/data_source/local/local_github_data_source.dart';
 import 'package:ultimate_flutter_project/features/github/data/data_source/remote/remote_github_data_source.dart';
 import 'package:ultimate_flutter_project/features/github/domain/model/github_owner.dart';
@@ -11,12 +10,10 @@ class GithubRepositoryImpl extends GithubRepository {
   GithubRepositoryImpl({
     required this.localGithubDataSource,
     required this.remoteGithubDataSource,
-    required this.connectivity,
   });
 
   final LocalGithubDataSource localGithubDataSource;
   final RemoteGithubDataSource remoteGithubDataSource;
-  final Connectivity connectivity;
 
   @override
   FutureOr<List<GithubRepo>> fetchRepoListByUser({
@@ -24,14 +21,12 @@ class GithubRepositoryImpl extends GithubRepository {
   }) async {
     List<GithubRepo> result = <GithubRepo>[];
 
-    final connectivityResult = await connectivity.checkConnectivity();
-
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      result =
-          await localGithubDataSource.fetchRepoListByUser(username: username);
-    } else {
+    try {
       result =
           await remoteGithubDataSource.fetchRepoListByUser(username: username);
+    } on Exception catch (_) {
+      result =
+          await localGithubDataSource.fetchRepoListByUser(username: username);
     }
 
     return result;
@@ -40,17 +35,54 @@ class GithubRepositoryImpl extends GithubRepository {
   @override
   FutureOr<List<GithubOwner>> fetchGithubUserList({
     required String? username,
-  }) {
-    return remoteGithubDataSource.fetchGithubUserList(username: username);
+  }) async {
+    List<GithubOwner> result = <GithubOwner>[];
+
+    try {
+      final remoteOwnerListResult =
+          await remoteGithubDataSource.fetchGithubUserList(username: username);
+
+      await Future.forEach(remoteOwnerListResult, (element) async {
+        final localOwnerFounded = await localGithubDataSource
+            .findGithubUserByName(username: element.name);
+
+        element = element.copyWith(isFavorite: localOwnerFounded != null);
+
+        result.add(element);
+      });
+    } on Exception catch (_) {
+      result =
+          await localGithubDataSource.fetchGithubUserList(username: username);
+    }
+
+    return result;
   }
 
   @override
-  FutureOr<void> favoriteGithubRepo({required GithubRepo value}) {
-    return localGithubDataSource.favoriteGithubRepo(value: value);
+  FutureOr<void> favoriteGithubRepo({required GithubRepo value}) async {
+    try {
+      await localGithubDataSource.favoriteGithubRepo(value: value);
+    } on Exception catch (e) {}
   }
 
   @override
-  FutureOr<void> favoriteGithubUser({required GithubOwner value}) {
-    return localGithubDataSource.favoriteGithubUser(value: value);
+  FutureOr<void> favoriteGithubUser({required GithubOwner value}) async {
+    try {
+      await localGithubDataSource.favoriteGithubUser(value: value);
+    } on Exception catch (e) {}
+  }
+
+  @override
+  FutureOr<void> unFavoriteGithubUser({required GithubOwner value}) async {
+    try {
+      await localGithubDataSource.favoriteGithubUser(value: value);
+    } on Exception catch (e) {}
+  }
+
+  @override
+  FutureOr<GithubOwner?> findOwnerOnDatabase({required String name}) async {
+    final result =
+        await localGithubDataSource.findGithubUserByName(username: name);
+    return result;
   }
 }
